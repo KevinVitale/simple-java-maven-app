@@ -5,12 +5,16 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                sh 'mvn -B -DskipTests clean package'
+                container('maven-jdk9') {
+                    sh 'mvn -B -DskipTests clean package'
+                }
             }
         }
         stage('Test') {
             steps {
-                sh 'mvn test'
+                container('maven-jdk9') {
+                    sh 'mvn test'
+                }
             }
             post {
                 always {
@@ -20,7 +24,9 @@ pipeline {
         }
         stage('Deliver') {
             steps {
-                sh './jenkins/scripts/deliver.sh'
+                container('maven-jdk9') {
+                    sh './jenkins/scripts/deliver.sh'
+                }
             }
         }
     }
